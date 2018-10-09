@@ -27,6 +27,7 @@ class WordSoup:
             self.place_random(word)
         if DEBUG_MODE:
             print(self.word_placements)
+            print(self.checkIntersection())
 
     def generate_empty_board(self):
         size = self.get_current_size()
@@ -54,7 +55,28 @@ class WordSoup:
                 "row": randint(0, size),
                 "col": randint(0, size),
                 "orientation": choice(list(Orientation)),
-            } 
+            }
+            break
+
+    def checkIntersection(self):
+        lista_de_cordenadas = []
+        for word, placement in self.word_placements.items():
+            if placement["orientation"] == Orientation.HORIZONTAL:
+                cordenadas = []
+                for i in range(len(word)):
+                    cordenadas.append((placement["row"] , placement["col"]+i))
+                lista_de_cordenadas.append(cordenadas)
+            elif placement["orientation"] == Orientation.VERTICAL:
+                cordenadas = []
+                for i in range(len(word)):
+                    cordenadas.append((placement["row"]+i, placement["col"]))
+                lista_de_cordenadas.append(cordenadas)
+            elif placement["orientation"] == Orientation.HORIZONTAL:
+                cordenadas = []
+                for i in range(len(word)):
+                    cordenadas.append((placement["row"]+i, placement["col"]+i))
+                lista_de_cordenadas.append(cordenadas)
+        return lista_de_cordenadas
 
     def get_current_size(self):
         candidates = [max(map(len, self.wordlist))]
@@ -86,7 +108,7 @@ def get_wordlist_input():
         if all(map(lambda word: valid_word_pattern.match(word), wordlist)):
             break
         else:
-            print(colored("Invalid input.", "red"))
+            print("Invalid input.")
     return wordlist
 
 if __name__ == "__main__":
