@@ -1,16 +1,40 @@
 import re
 from enum import Enum, unique
 from random import choice, randint, random, shuffle
-
-DEBUG = False
-
-
-def log(message):
-    if DEBUG:
-        print(message)
+from termcolor import colored
 
 
-# TODO: Valido el uso
+DEBUG = True
+
+# Representamos una sopa de letras como:
+# sopa_de_letras: list(list(str))
+# Por ejemplo:
+# [["a", "b", "x", "s", "w"],
+# [["s", "a", "o", "s", "u"],
+# [["t", "r", "v", "c", "t"],
+# [["e", "c", "n", "s", "a"],
+# [["p", "o", "e", "i", "r"]]
+
+# Representamos un diccionario de word_placements como:
+# word_placements: dict<str>(placement)
+# Por ejemplo:
+# {
+#   "word_1": placement, -----------> placement de la palabra 1
+#   "word_2": placement, -----------> placement de la palabra 2
+#   ...
+#   "word_n": placement ------------> placement de la palabra n
+# }
+
+# Representamos un placement de una palabra como:
+# placement: dict<str>(int / Orientation)
+# Por ejemplo:
+# placement =  {
+#   "row": int, -----------------> fila donde comienza la palabra
+#   "col": int, -----------------> columna donde comienza la palabra
+#   "orientation": Orientation --> tipo de orientación de la palabra
+# }
+
+
 @unique
 class Orientation(Enum):
     HORIZONTAL = 1
@@ -20,73 +44,67 @@ class Orientation(Enum):
     DIAGONAL = 5
 
 
-# Representamos listas de palabras con listas de strings
 # get_wordlist_input: -> list(str)
-# Recibe una string con palabras separadas por espacios. Si es válida, elimina
-# los duplicados, transforma a mayúsculas las palabras y las devuelve en una
-# lista. Si no lo es, advierte la string es inválida y vuelve al inicio.
+# Recibe como input una string con palabras separadas por espacios. Si es
+# válida, elimina los duplicados, transforma a mayúsculas las palabras y las
+# devuelve en una lista. Si no lo es, advierte que la string es inválida y
+# vuelve a pedirla.
 def get_wordlist_input():
     while True:
-        wordlist = input("Enter words separated by a space: ").split(" ")
-        # TODO: preguntar si es necesario
+        words = input("Ingresa las palabras separadas por espacios: ")
+        wordlist = words.split(" ")  # crea una lista con las palabras
         wordlist = set(wordlist)  # elimina duplicados
         wordlist = [word.upper() for word in wordlist]  # a mayúsculas
 
         if is_wordlist_valid(wordlist):
             return wordlist
         else:
-            print("Invalid input.")
+            print("Input inválido")
 
 
-# Representamos listas de palabras con listas de strings
 # is_wordlist_valid: list(str) -> bool
 # Recibe una lista de palabras y retorna True si todas coinciden con
 # WORD_PATTERN o False en caso contrario.
 def is_wordlist_valid(wordlist):
     # Coincide con strings con más de un caracter que solo contienen letras del
     # abecedario español.
-    # TODO: preguntar si se puede usar
     WORD_PATTERN = re.compile("^[A-ZÑ]{2,}$")
+
     return all([WORD_PATTERN.match(word) for word in wordlist])
 
 
-# Representamos la sopa de letras con una matriz (lista de listas de strings)
-# create_soup: list(str) -> list(list(str))
-# Recibe una lista de palabras y devuelve una sopa de letras que tiene las
-# palabras recibidas.
-def create_soup(wordlist):
+# generate_soup: list(str) -> sopa_de_letras
+# Recibe una lista de palabras y devuelve una sopa de letras con ellas.
+def generate_soup(wordlist):
     size = calculate_soup_size(wordlist)
     word_placements = generate_word_placements(wordlist, size)
     soup_matrix = create_soup_matrix(size, word_placements)
 
+    if DEBUG:
+        display_soup(soup_matrix, word_placements)
+    else:
+        display_soup(soup_matrix)
     return soup_matrix
 
 
 # calculate_soup_size: list(str) -> int
 # Recibe una lista de palabras y devuelve el tamaño que se debe usar para
-# generar la sopa de letras.
-# El calculo realizado es: TODO:
+# generar la sopa de letras. Tiene en cuenta la longitud de la palabra más
+# larga, la cantidad de palabras recibidas y un PADDING extra.
 def calculate_soup_size(wordlist):
-    # print("Calculating soup size")
-    c = 2
-    max_len_word = max([len(word) for word in wordlist])
-    max_size = max(max_len_word, len(wordlist)) + c
-    return max_size
+    PADDING = 2
+    return max([len(word) for word in wordlist] + [len(wordlist)]) + PADDING
 
 
-# Representamos
-# generate_word_placements: list(str) int -> TODO: preguntar como es
-# Recibe lalista de palabras a esconder y el tamaño de la sopa de letras y
-# devuelve un diccionario con las palabras, su posicion y direccion.
-def generate_word_placements(wordlist, size):
-    # print("Generating word placements")
-
+# generate_word_placements: list(str) int -> word_placements
+# Recibe una lista de palabras y el tamaño de la sopa de letras, y devuelve
+# un diccionario de word_placements.
+def generate_word_placements(wordlist, size):  # TODO: improve
     word_placements = {}
     current_word_index = 0
 
     while current_word_index != len(wordlist):
         word = wordlist[current_word_index]
-        # print(f"Current word: {word}")
         placement = try_to_place(word, word_placements, size)
         if placement:
             current_word_index += 1
@@ -99,19 +117,14 @@ def generate_word_placements(wordlist, size):
     return word_placements
 
 
-# Representamos un placement con un dict<str>(int / Orientation):
-# placement =  {
-#   "row": int,
-#   "col": int
-#   "orientation": string,
-# }
-# try_to_place: string dict int -> placement
-
+# try_to_place: string word_placements int -> placement / bool
+# Recibe una palabra, un diccionario de word_placements y el tamaño de la sopa
+# de letras. Devuelve un placement para la palabra si existe uno posible, y
+# False en caso contrario.
 def try_to_place(word, word_placements, size):
     possible_orientations = list(Orientation)
     possible_positions = [(row, col)
-                          for col in range(size)
-                          for row in range(size)]
+                          for col in range(size) for row in range(size)]
 
     shuffle(possible_orientations)
     shuffle(possible_positions)
@@ -122,14 +135,17 @@ def try_to_place(word, word_placements, size):
                 "col": col,
                 "orientation": orientation
             }
-            # print("Trying placement: ", placement)
             if is_placement_valid(word, placement, word_placements, size):
-                # print("Valid!")
                 return placement
 
     return False
 
 
+# is_placement_valid: str placement word_placements int -> bool
+# Recibe una palabra, un posible placement para la misma, un diccionario de
+# word_placements con las palabras ya ubicadas, y el tamaño de la sopa de
+# letras.
+# Devuelve True si el placement es válido, False en caso contrario.
 def is_placement_valid(word, placement, word_placements, size):
     row = placement["row"]
     col = placement["col"]
@@ -158,6 +174,7 @@ def is_placement_valid(word, placement, word_placements, size):
     return True
 
 
+# get_letter_positions: str placement -> dict<tuple(int, int)>(str)
 def get_letter_positions(word, placement):
         row = placement["row"]
         col = placement["col"]
@@ -186,12 +203,11 @@ def get_letter_positions(word, placement):
         return letter_positions
 
 
-# Representamos sopa de letras con una lista de listas de strings
-# create_soup_matrix: int dict -> list(list(str))
-# Recibe el tamaño de la sopa de letras y un diccionario con las palabras y sus
-# posiciones y crea una sopa de letras
+# create_soup_matrix: int word_placements -> sopa?de?letras
+# Recibe el tamaño de la sopa de letras y un diccionario de word_placements,
+# y devuelve una sopa de letras usando el diccionario de word_placements.
 def create_soup_matrix(size, word_placements):
-    soup_matrix = [['-' for j in range(size)] for i in range(size)]
+    soup_matrix = [[random_letter() for j in range(size)] for i in range(size)]
 
     for word, placement in word_placements.items():
         row = placement["row"]
@@ -217,19 +233,178 @@ def create_soup_matrix(size, word_placements):
     return soup_matrix
 
 
-def display_soup(soup_matrix):
+def random_letter():
+    return choice(list("ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"))
+
+
+# display_soup: sopa_de_letras -> None
+# Recibe una sopa de letras y la muestra.
+def display_soup(soup_matrix, word_placements=False):
+    if word_placements:
+        soup_matrix = color_soup(soup_matrix, word_placements)
+    print("")
     print("\n".join([" ".join(row) for row in soup_matrix]))
+    print("")
 
-# TODO: Preguntar si es válido inglés
+
+def color_soup(soup, word_placements):
+    for word, placement in word_placements.items():
+        row = placement["row"]
+        col = placement["col"]
+        orientation = placement["orientation"]
+
+        if orientation == Orientation.HORIZONTAL:
+            for i in range(len(word)):
+                soup[row][col+i] = colored(word[i], color="green")
+
+        if orientation == Orientation.HORIZONTAL_REVERSED:
+            word = word[::-1]
+            for i in range(len(word)):
+                soup[row][col+i] = colored(word[i], color="green")
+
+        if orientation == Orientation.VERTICAL:
+            for i in range(len(word)):
+                soup[row+i][col] = colored(word[i], color="green")
+
+        if orientation == Orientation.VERTICAL_REVERSED:
+            word = word[::-1]
+            for i in range(len(word)):
+                soup[row+i][col] = colored(word[i], color="green")
+
+        if orientation == Orientation.DIAGONAL:
+            for i in range(len(word)):
+                soup[row+i][col+i] = colored(word[i], color="green")
+
+    return soup
+
+
+# solve_soup: sopa_de_letras list(str) -> word_placements
+def solve_soup(soup, wordlist):
+    word_placements = {word: find_word_placement(word, soup)
+                       for word in wordlist}
+    soup = color_soup(soup, word_placements)
+    display_soup(soup, word_placements)
+
+
+# find_word_placement: str sopa_de_letras -> placement
+def find_word_placement(word, soup):
+    size = len(soup)
+
+    candidates = find_first_letter_candidates(word, soup)
+    for position in candidates:
+        row = position[0]
+        col = position[1]
+
+        if col + len(word) <= size:
+            match = "".join([soup[row][col+i] for i in range(len(word))])
+            if word == match:
+                return {
+                    "row": row,
+                    "col": col,
+                    "orientation": Orientation.HORIZONTAL
+                }
+
+        if col - len(word) + 1 >= 0:
+            match = "".join([soup[row][col-i] for i in range(len(word))])
+            if word == match:
+                return {
+                    "row": row,
+                    "col": col - len(word) + 1,
+                    "orientation": Orientation.HORIZONTAL_REVERSED
+                }
+
+        if row + len(word) <= size:
+            match = "".join([soup[row+i][col] for i in range(len(word))])
+            if word == match:
+                return {
+                    "row": row,
+                    "col": col,
+                    "orientation": Orientation.VERTICAL
+                }
+
+        if row - len(word) + 1 >= 0:
+            match = "".join([soup[row-i][col] for i in range(len(word))])
+            if word == match:
+                return {
+                    "row": row - len(word) + 1,
+                    "col": col,
+                    "orientation": Orientation.VERTICAL_REVERSED
+                }
+
+        if row + len(word) <= size and col + len(word) <= size:
+            match = "".join([soup[row+i][col+i] for i in range(len(word))])
+            if word == match:
+                return {
+                    "row": row,
+                    "col": col,
+                    "orientation": Orientation.DIAGONAL
+                }
+
+
+# find_first_letter_candidates: str sopa_de_letras -> list(tuple(int, int))
+def find_first_letter_candidates(word, soup):
+    return [(row, col)
+            for col in range(len(soup)) for row in range(len(soup))
+            if word[0] == soup[row][col]]
+
+
+def parse_soups(f):
+    soups = []
+    wordlists = []
+
+    reading_soup = False
+    current_soup = []
+    current_wordlist = []
+    for line in f.readlines():
+        line = line.strip("\n")
+        if line == "# INICIO":
+            reading_soup = True
+        elif line == "# FIN":
+            reading_soup = False
+            soups.append(current_soup)
+            wordlists.append(current_wordlist)
+            current_soup = []
+            current_wordlist = []
+
+        elif reading_soup:
+            if len(current_soup) == 0 or len(current_soup) < len(current_soup[0]):
+                current_soup.append(line.split(" "))
+            else:
+                current_wordlist = line.split(" ")
+
+    return list(zip(soups, wordlists))
+
 if __name__ == "__main__":
-    # 1) Generar sopa de letras
-    # wordlist = get_wordlist_input()
-    words = ["this", "is", "as", "big", "car", "love", "red", "blue", "dark", "grey", "cool", "dark", "sos", "whale", "time", "casa", "epe", "trial", "fire"]
-    for i in range(10000):
-        wordlist = list(set(choice(words) for _ in range(8)))
-        print(i+1, wordlist)
-        soup = create_soup(wordlist)
-        display_soup(soup)
-    print("Finished!")
+    print("Trabajo Práctico: sopa-de-letras")
+    print("Integrantes: Bautista Marelli y Juan Cruz de La Torre")
+    print("")
 
-    # 2) Resolver sopa de letras
+    done = False
+    while not done:
+        print(colored("Selecciona una opción:"))
+        print(colored("1) Generar sopa de letras"))
+        print(colored("2) Resolver sopa de letras"))
+        print(colored("3) Salir"))
+
+        option = input(">>> ")
+        if option == "1":
+            wordlist = get_wordlist_input()
+            soup = generate_soup(wordlist)
+            solve_soup(soup, wordlist)
+            done = True
+        elif option == "2":
+            filename = input("Ingresa el nombre del archivo: ")
+            with open(filename, "r") as f:
+                soups = parse_soups(f)
+                for soup, wordlist in soups:
+                    solve_soup(soup, wordlist)
+            done = True
+            # try:
+
+            # except:
+            #     print(colored("El archivo no existe", color="red"))
+
+        elif option == "3":
+            done = True
+        else:
+            print(colored("Opción inválida", color="red"))
