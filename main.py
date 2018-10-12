@@ -4,7 +4,7 @@ from random import choice, randint, random, shuffle
 from termcolor import colored
 
 
-DEBUG = True
+DEBUG = False
 
 # Representamos una sopa de letras como:
 # sopa_de_letras: list(list(str))
@@ -390,7 +390,6 @@ if __name__ == "__main__":
         if option == "1":
             wordlist = get_wordlist_input()
             soup = generate_soup(wordlist)
-            solve_soup(soup, wordlist)
             done = True
         elif option == "2":
             filename = input("Ingresa el nombre del archivo: ")
