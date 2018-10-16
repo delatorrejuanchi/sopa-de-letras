@@ -232,6 +232,7 @@ def create_soup_matrix(size, word_placements):
 
     return soup_matrix
 
+
 # random_letter: None
 # Devuelve una letra al azar
 def random_letter():
@@ -370,7 +371,8 @@ def parse_soups(f):
             current_wordlist = []
 
         elif reading_soup:
-            if len(current_soup) == 0 or len(current_soup) < len(current_soup[0]):
+            if (len(current_soup) == 0 or
+                    len(current_soup) < len(current_soup[0])):
                 current_soup.append(line.split(" "))
             else:
                 current_wordlist = line.split(" ")
@@ -380,30 +382,42 @@ def parse_soups(f):
 if __name__ == "__main__":
     print("Trabajo Práctico: sopa-de-letras")
     print("Integrantes: Bautista Marelli y Juan Cruz de La Torre")
-    print("")
 
     done = False
     while not done:
-        print(colored("Selecciona una opción:"))
-        print(colored("1) Generar sopa de letras"))
-        print(colored("2) Resolver sopa de letras"))
-        print(colored("3) Salir"))
+        print("")
+        print("Selecciona una opción:")
+        print("1) Generar sopa de letras")
+        print("2) Generar N sopas de letras")
+        print("3) Resolver sopa de letras")
+        print("4) Activar/Desactivar modo depuración")
+        print("5) Salir")
 
         option = input(">>> ")
         if option == "1":
             wordlist = get_wordlist_input()
-            soup = generate_soup(wordlist)
+            generate_soup(wordlist)
         elif option == "2":
+            try:
+                N = int(input("N: "))
+                wordlist = get_wordlist_input()
+                for _ in range(N):
+                    generate_soup(wordlist)
+            except ValueError:
+                print(colored("El valor no es un número", color="red"))
+        elif option == "3":
             filename = input("Ingresa el nombre del archivo: ")
             try:
                 with open(filename, "r") as f:
                     soups = parse_soups(f)
                     for soup, wordlist in soups:
                         solve_soup(soup, wordlist)
-            except:
+            except FileNotFoundError:
                 print(colored("El archivo no existe", color="red"))
-
-        elif option == "3":
+        elif option == "4":
+            DEBUG = not DEBUG
+            print(f"Modo depuración: {'Activado' if DEBUG else 'Desactivado'}")
+        elif option == "5":
             done = True
         else:
             print(colored("Opción inválida", color="red"))
