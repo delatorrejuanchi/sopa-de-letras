@@ -1,3 +1,6 @@
+#!usr/bin/python3
+#-- coding: utf-8 --
+
 import re
 from enum import Enum
 from random import choice, randint, random, shuffle
@@ -95,10 +98,9 @@ def generate_soup(wordlist):
 # calculate_soup_size: list(str) -> int
 # Recibe una lista de palabras y devuelve el tamaño que se debe usar para
 # generar la sopa de letras. Tiene en cuenta la longitud de la palabra más
-# larga, la cantidad de palabras recibidas y un PADDING extra.
+# larga, la cantidad de palabras recibidas y un paddong extra (2).
 def calculate_soup_size(wordlist):
-    PADDING = 2
-    return max([len(word) for word in wordlist] + [len(wordlist)]) + PADDING
+    return max([len(word) for word in wordlist] + [len(wordlist)]) + 2
 
 
 # generate_word_placements: list(str) int -> word_placements
@@ -303,7 +305,7 @@ def solve_soup(soup, wordlist):
     word_placements = {word: find_word_placement(word, soup)
                        for word in wordlist}
 
-    for word, placement in enumerate(word_placements):
+    for word, placement in word_placements.items():
         if placement is None:
             del word_placements[word]
             print(colored(f"No se encontró la palabra: {word}"))
