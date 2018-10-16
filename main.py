@@ -390,19 +390,15 @@ if __name__ == "__main__":
         if option == "1":
             wordlist = get_wordlist_input()
             soup = generate_soup(wordlist)
-            solve_soup(soup, wordlist)
-            done = True
         elif option == "2":
             filename = input("Ingresa el nombre del archivo: ")
-            with open(filename, "r") as f:
-                soups = parse_soups(f)
-                for soup, wordlist in soups:
-                    solve_soup(soup, wordlist)
-            done = True
-            # try:
-
-            # except:
-            #     print(colored("El archivo no existe", color="red"))
+            try:
+                with open(filename, "r") as f:
+                    soups = parse_soups(f)
+                    for soup, wordlist in soups:
+                        solve_soup(soup, wordlist)
+            except:
+                print(colored("El archivo no existe", color="red"))
 
         elif option == "3":
             done = True
