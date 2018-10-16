@@ -232,7 +232,8 @@ def create_soup_matrix(size, word_placements):
 
     return soup_matrix
 
-
+# random_letter: None
+# Devuelve una letra al azar
 def random_letter():
     return choice(list("ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"))
 
@@ -247,7 +248,9 @@ def display_soup(soup_matrix, word_placements=False):
     print("")
 
 
-def color_soup(soup, word_placements):
+# color_soup: sopa_de_letra word_placementes -> sopa_de_letras
+# Recibe una sopa_de_letras
+def color_soup(soup_matrix, word_placements):
     for word, placement in word_placements.items():
         row = placement["row"]
         col = placement["col"]
@@ -255,27 +258,27 @@ def color_soup(soup, word_placements):
 
         if orientation == Orientation.HORIZONTAL:
             for i in range(len(word)):
-                soup[row][col+i] = colored(word[i], color="green")
+                soup_matrix[row][col+i] = colored(word[i], color="green")
 
         if orientation == Orientation.HORIZONTAL_REVERSED:
             word = word[::-1]
             for i in range(len(word)):
-                soup[row][col+i] = colored(word[i], color="green")
+                soup_matrix[row][col+i] = colored(word[i], color="green")
 
         if orientation == Orientation.VERTICAL:
             for i in range(len(word)):
-                soup[row+i][col] = colored(word[i], color="green")
+                soup_matrix[row+i][col] = colored(word[i], color="green")
 
         if orientation == Orientation.VERTICAL_REVERSED:
             word = word[::-1]
             for i in range(len(word)):
-                soup[row+i][col] = colored(word[i], color="green")
+                soup_matrix[row+i][col] = colored(word[i], color="green")
 
         if orientation == Orientation.DIAGONAL:
             for i in range(len(word)):
-                soup[row+i][col+i] = colored(word[i], color="green")
+                soup_matrix[row+i][col+i] = colored(word[i], color="green")
 
-    return soup
+    return soup_matrix
 
 
 # solve_soup: sopa_de_letras list(str) -> word_placements
