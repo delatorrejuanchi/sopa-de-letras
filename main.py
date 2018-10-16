@@ -1,5 +1,5 @@
 import re
-from enum import Enum, unique
+from enum import Enum
 from random import choice, randint, random, shuffle
 from termcolor import colored
 
@@ -35,7 +35,12 @@ DEBUG = False
 # }
 
 
-@unique
+# Representamos las 5 orientaciones con números:
+# Orientation.HORIZONTAL = 1
+# Orientation.HORIZONTAL_REVERSED = 5
+# Orientation.VERTICAL = 5
+# Orientation.VERTICAL_REVERSED = 5
+# Orientation.DIAGONAL = 5
 class Orientation(Enum):
     HORIZONTAL = 1
     HORIZONTAL_REVERSED = 2
@@ -45,7 +50,7 @@ class Orientation(Enum):
 
 
 # get_wordlist_input: -> list(str)
-# Recibe como input una string con palabras separadas por espacios. Si es
+# Pide como input una string con palabras separadas por espacios. Si es
 # válida, elimina los duplicados, transforma a mayúsculas las palabras y las
 # devuelve en una lista. Si no lo es, advierte que la string es inválida y
 # vuelve a pedirla.
@@ -59,7 +64,7 @@ def get_wordlist_input():
         if is_wordlist_valid(wordlist):
             return wordlist
         else:
-            print("Input inválido")
+            print(colored("Input inválido", color="red"))
 
 
 # is_wordlist_valid: list(str) -> bool
@@ -97,8 +102,9 @@ def calculate_soup_size(wordlist):
 
 
 # generate_word_placements: list(str) int -> word_placements
-# Recibe una lista de palabras y el tamaño de la sopa de letras, y devuelve
-# un diccionario de word_placements.
+# Recibe una lista de palabras y el tamaño de la sopa de letras, genera para
+# cada palabra un placement al azar y los devuelve en un diccionario de
+# word_placements.
 def generate_word_placements(wordlist, size):  # TODO: improve
     word_placements = {}
     current_word_index = 0
@@ -174,7 +180,10 @@ def is_placement_valid(word, placement, word_placements, size):
     return True
 
 
-# get_letter_positions: str placement -> dict<tuple(int, int)>(str)
+# get_letter_positions: str placement -> letter_positions
+# Recibe una palabra y el placement de la misma, devuelve un diccionario donde
+# las keys son las ubicaciones de cada letra de la palabra, y los values son
+# cada letra.
 def get_letter_positions(word, placement):
         row = placement["row"]
         col = placement["col"]
@@ -203,7 +212,7 @@ def get_letter_positions(word, placement):
         return letter_positions
 
 
-# create_soup_matrix: int word_placements -> sopa?de?letras
+# create_soup_matrix: int word_placements -> sopa_de_letras
 # Recibe el tamaño de la sopa de letras y un diccionario de word_placements,
 # y devuelve una sopa de letras usando el diccionario de word_placements.
 def create_soup_matrix(size, word_placements):
@@ -233,15 +242,17 @@ def create_soup_matrix(size, word_placements):
     return soup_matrix
 
 
-# random_letter: None
-# Devuelve una letra al azar
+# random_letter -> str
+# Devuelve una letra mayúscula al azar del abecedario español.
 def random_letter():
     return choice(list("ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"))
 
 
-# display_soup: sopa_de_letras -> None
-# Recibe una sopa de letras y la muestra.
-def display_soup(soup_matrix, word_placements=False):
+# display_soup: sopa_de_letras (word_placements) -> None
+# Recibe una sopa de letras y un diccionario de word_placements opcional,
+# y la muestra. Si recibe el diccionario de word_placements, colorea las
+# palabras para que sea más fácil visualizar la sopa.
+def display_soup(soup_matrix, word_placements=None):
     if word_placements:
         soup_matrix = color_soup(soup_matrix, word_placements)
     print("")
@@ -250,7 +261,8 @@ def display_soup(soup_matrix, word_placements=False):
 
 
 # color_soup: sopa_de_letra word_placementes -> sopa_de_letras
-# Recibe una sopa_de_letras
+# Recibe una sopa_de_letras y un diccionario de word_placements, devuelve
+# una sopa_de_letras en la que las letras de cada palabra son verdes.
 def color_soup(soup_matrix, word_placements):
     for word, placement in word_placements.items():
         row = placement["row"]
@@ -283,14 +295,27 @@ def color_soup(soup_matrix, word_placements):
 
 
 # solve_soup: sopa_de_letras list(str) -> word_placements
+# Recibe una sopa_de_letras y una lista de palabras. La resuelve, la muestra
+# y devuelve un diccionario de word_placements con los placements de las
+# palabras de la wordlist. Si alguna de las palabras no fue encontrada, avisa
+# al usuario.
 def solve_soup(soup, wordlist):
     word_placements = {word: find_word_placement(word, soup)
                        for word in wordlist}
+
+    for word, placement in enumerate(word_placements):
+        if placement is None:
+            del word_placements[word]
+            print(colored(f"No se encontró la palabra: {word}"))
+
     soup = color_soup(soup, word_placements)
     display_soup(soup, word_placements)
+    return word_placements
 
 
-# find_word_placement: str sopa_de_letras -> placement
+# find_word_placement: str sopa_de_letras -> placement / None
+# Recibe una palabra y una sopa_de_letras, busca la palabra y devuelve su
+# placement en la sopa. Si no la encuentra, devuelve None.
 def find_word_placement(word, soup):
     size = len(soup)
 
@@ -346,12 +371,17 @@ def find_word_placement(word, soup):
 
 
 # find_first_letter_candidates: str sopa_de_letras -> list(tuple(int, int))
+# Recibe una palabra y una sopa_de_letras, devuelve una lista de las posiciones
+# que contienen la primera letra de la palabra.
 def find_first_letter_candidates(word, soup):
     return [(row, col)
             for col in range(len(soup)) for row in range(len(soup))
             if word[0] == soup[row][col]]
 
 
+# parse_soups: file -> list(tuple(sopa_de_letras, list(str)))
+# Recibe un archivo, devuelve una lista con tuplas de sopa_de_letras y lista
+# de palabras.
 def parse_soups(f):
     soups = []
     wordlists = []
