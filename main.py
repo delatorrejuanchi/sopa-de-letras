@@ -1,3 +1,5 @@
+#!usr/bin/python3
+
 import re
 from enum import Enum
 from random import choice, randint, random, shuffle
