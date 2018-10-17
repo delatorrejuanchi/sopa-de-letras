@@ -5,23 +5,23 @@ from random import shuffle, seed
 from main import *
 
 dictionary = ["MANY", "DAFFY", "INCREDIBLE", "MATCH", "PENITENT", "ADMIT",
-                "DECOROUS", "BROAD", "STUPID", "AGONIZING", "DISGUSTED",
-                "DROP", "FORGETFUL", "RULE", "OBESE", "CATS", "TYPICAL",
-                "SPACE", "BOTTLE", "RARE", "FILTHY", "SMOKE", "WOOZY",
-                "YOUTHFUL", "CROWDED", "RACE", "ITCHY", "SOUND", "PUNCH",
-                "MESS", "EARTH", "SOFT", "MEAL", "ANNOYED", "HOME",
-                "DETERMINED", "FINICKY", "CLOISTERED", "FEAR", "MUTE",
-                "FRESH", "ZANY", "HELP", "OVEN", "SILLY", "PIE", "DAM",
-                "ALARM", "WILD", "WAVE", "NIGHT", "ACOUSTIC", "CREEPY",
-                "WHOLESALE", "BLINK", "NEIGHBORLY", "WONDERFUL", "RUN",
-                "SLEEPY", "EXUBERANT", "TWIST", "BALANCE", "STATEMENT",
-                "BLACK", "DISTANCE", "AWFUL", "MILITARY", "OBSERVATION",
-                "PLUCKY", "WAX", "SKINNY", "BEHAVIOR", "FLIGHT", "ROT",
-                "VALUE", "FINE", "TOY", "CELLAR", "GLIB", "DOGS", "KILL",
-                "MEND", "APPROVE", "RAIN", "ELEGANT", "ANXIOUS", "SHOE",
-                "SUSPEND", "IRATE", "SORT", "EXCLUSIVE", "ROOF", "CAN",
-                "HOOK", "BUZZ", "CONFUSED", "EMPLOY", "VALUABLE", "RESCUE",
-                "SUIT"]
+              "DECOROUS", "BROAD", "STUPID", "AGONIZING", "DISGUSTED",
+              "DROP", "FORGETFUL", "RULE", "OBESE", "CATS", "TYPICAL",
+              "SPACE", "BOTTLE", "RARE", "FILTHY", "SMOKE", "WOOZY",
+              "YOUTHFUL", "CROWDED", "RACE", "ITCHY", "SOUND", "PUNCH",
+              "MESS", "EARTH", "SOFT", "MEAL", "ANNOYED", "HOME",
+              "DETERMINED", "FINICKY", "CLOISTERED", "FEAR", "MUTE",
+              "FRESH", "ZANY", "HELP", "OVEN", "SILLY", "PIE", "DAM",
+              "ALARM", "WILD", "WAVE", "NIGHT", "ACOUSTIC", "CREEPY",
+              "WHOLESALE", "BLINK", "NEIGHBORLY", "WONDERFUL", "RUN",
+              "SLEEPY", "EXUBERANT", "TWIST", "BALANCE", "STATEMENT",
+              "BLACK", "DISTANCE", "AWFUL", "MILITARY", "OBSERVATION",
+              "PLUCKY", "WAX", "SKINNY", "BEHAVIOR", "FLIGHT", "ROT",
+              "VALUE", "FINE", "TOY", "CELLAR", "GLIB", "DOGS", "KILL",
+              "MEND", "APPROVE", "RAIN", "ELEGANT", "ANXIOUS", "SHOE",
+              "SUSPEND", "IRATE", "SORT", "EXCLUSIVE", "ROOF", "CAN",
+              "HOOK", "BUZZ", "CONFUSED", "EMPLOY", "VALUABLE", "RESCUE",
+              "SUIT"]
 
 seed(1234)
 
@@ -39,20 +39,20 @@ def test_is_wordlist_valid():
     assert(is_wordlist_valid(valid_wordlist))
     assert(not is_wordlist_valid(invalid_wordlist_not_uppercase))
     assert(not is_wordlist_valid(invalid_wordlist_single_character_word))
-    assert(not is_wordlist_valid(invalid_wordlist_not_alphabetic))                
+    assert(not is_wordlist_valid(invalid_wordlist_not_alphabetic))
 
 
 def test_generate_soup():
     n_words = 10
-    
+
     for i in range(1000):
-        shuffle(dictionary)        
+        shuffle(dictionary)
         wordlist = dictionary[:n_words]
         soup = generate_soup(wordlist)
 
         assert(type(soup) == list)
         assert(all([type(row) == list for row in soup]))
-        assert(all([type(letter) == str for row in soup for letter in row ]))
+        assert(all([type(letter) == str for row in soup for letter in row]))
 
 
 def test_calculate_soup_size():
@@ -62,14 +62,14 @@ def test_calculate_soup_size():
 
     assert(calculate_soup_size(wordlist_1) == 10)
     assert(calculate_soup_size(wordlist_2) == 10)
-    assert(calculate_soup_size(wordlist_3) == 11)                
+    assert(calculate_soup_size(wordlist_3) == 11)
 
 
 def test_generate_word_placements():
     n_words = 10
-    
+
     for i in range(1000):
-        shuffle(dictionary)   
+        shuffle(dictionary)
         wordlist = dictionary[:n_words]
         soup_size = calculate_soup_size(wordlist)
 
@@ -78,7 +78,7 @@ def test_generate_word_placements():
         assert(type(word_placements) == dict)
         assert(all([type(key) == str for key in word_placements]))
         assert(all([type(value) == dict for value in word_placements.values()]))
-    
+
 
 def test_try_to_place():
     pass
@@ -128,7 +128,7 @@ def test_is_placement_valid():
     assert(not is_placement_valid(word, placement_2, word_placements, size))
     assert(is_placement_valid(word, placement_3, word_placements, size))
     assert(not is_placement_valid(word, placement_4, word_placements, size))
-    
+
 
 def test_get_letter_positions():
     word_1 = "PERRO"
@@ -145,7 +145,7 @@ def test_get_letter_positions():
         (4, 9): "R",
         (4, 10): "O"
     }
-    
+
     word_2 = "GATO"
     placement_2 = {
         "row": 0,
@@ -175,13 +175,13 @@ def test_get_letter_positions():
         (13, 5): "C",
         (14, 5): "E",
         (15, 5): "L",
-        (16, 5): "E",                
+        (16, 5): "E",
     }
 
     assert(get_letter_positions(word_1, placement_1) == letter_postions_1)
     assert(get_letter_positions(word_2, placement_2) == letter_postions_2)
     assert(get_letter_positions(word_3, placement_3) == letter_postions_3)
-            
+
 
 def test_create_soup_matrix():
     size = 7
