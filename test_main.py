@@ -45,7 +45,7 @@ def test_is_wordlist_valid():
 def test_generate_soup():
     n_words = 10
 
-    for i in range(1000):
+    for _ in range(1000):
         shuffle(dictionary)
         wordlist = dictionary[:n_words]
         soup = generate_soup(wordlist)
@@ -68,7 +68,7 @@ def test_calculate_soup_size():
 def test_generate_word_placements():
     n_words = 10
 
-    for i in range(1000):
+    for _ in range(1000):
         shuffle(dictionary)
         wordlist = dictionary[:n_words]
         soup_size = calculate_soup_size(wordlist)
@@ -77,7 +77,7 @@ def test_generate_word_placements():
 
         assert(type(word_placements) == dict)
         assert(all([type(key) == str for key in word_placements]))
-        assert(all([type(value) == dict for value in word_placements.values()]))
+        assert(all([type(v) == dict for v in word_placements.values()]))
 
 
 def test_try_to_place():
