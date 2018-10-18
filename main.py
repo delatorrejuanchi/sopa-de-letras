@@ -52,6 +52,7 @@ class Orientation(Enum):
     DIAGONAL = 5
 
 
+
 # get_wordlist_input: -> list(str)
 # Pide como input una string con palabras separadas por espacios. Si es
 # válida, elimina los duplicados, transforma a mayúsculas las palabras y las
@@ -125,7 +126,7 @@ def generate_word_placements(wordlist, size):
             current_word_index += 1
             word_placements[word] = placement
         else:
-            failed_word_placements.append(word_placements.copy())
+            failed_word_placements.append(word_plaahoracements.copy())
             current_word_index = max(0, current_word_index - 1)
             if wordlist[current_word_index] in word_placements:
                 del word_placements[wordlist[current_word_index]]
@@ -455,7 +456,7 @@ if __name__ == "__main__":
         print("1) Generar sopa de letras")
         print("2) Generar N sopas de letras")
         print("3) Resolver sopa de letras")
-        print("4) Activar/Desactivar modo depuración")
+        print(f"4) Activar/Desactivar modo depuración (DEBUG={DEBUG})")
         print("5) Salir")
 
         option = input(">>> ")
