@@ -77,7 +77,7 @@ def test_generate_word_placements():
 
         assert(type(word_placements) == dict)
         assert(all([type(key) == str for key in word_placements]))
-        assert(all([type(v) == dict for v in word_placements.values()]))
+        assert(all([type(val) == dict for val in word_placements.values()]))
 
 
 def test_try_to_place():
@@ -222,16 +222,142 @@ def test_color_soup():
 
 
 def test_solve_soup():
-    pass
+    soup = [["P", "A", "E", "N", "J", "Y", "U", "K", "I", "F", "C"],
+            ["E", "X", "Y", "L", "P", "C", "Y", "W", "V", "A", "L"],
+            ["E", "J", "V", "Q", "B", "J", "X", "I", "C", "G", "F"],
+            ["E", "S", "T", "O", "R", "N", "U", "D", "O", "N", "U"],
+            ["U", "D", "N", "W", "Z", "M", "D", "O", "R", "U", "T"],
+            ["Y", "R", "S", "E", "Ñ", "A", "Ñ", "C", "R", "S", "B"],
+            ["L", "O", "Y", "H", "L", "T", "D", "O", "I", "M", "O"],
+            ["E", "X", "V", "P", "H", "E", "Y", "N", "E", "A", "L"],
+            ["Q", "V", "X", "U", "H", "R", "V", "A", "N", "S", "X"],
+            ["C", "I", "N", "T", "A", "A", "C", "I", "T", "J", "K"],
+            ["B", "X", "K", "X", "G", "O", "P", "P", "E", "E", "S"]]
+
+    wordlist = {"PIANO", "MATERA", "FUTBOL", "CORRIENTE",
+                "CINTA", "ESTORNUDO", "SAMSUNG"}
+
+    word_placements = {
+        "PIANO": {
+            "row": 6,
+            "col": 7,
+            "orientation": Orientation.VERTICAL_REVERSED
+        },
+        "MATERA": {
+            "row": 4,
+            "col": 5,
+            "orientation": Orientation.VERTICAL
+        },
+        "FUTBOL": {
+            "row": 2,
+            "col": 10,
+            "orientation": Orientation.VERTICAL
+        },
+        "CORRIENTE": {
+            "row": 2,
+            "col": 8,
+            "orientation": Orientation.VERTICAL
+        },
+        "CINTA": {
+            "row": 9,
+            "col": 0,
+            "orientation": Orientation.HORIZONTAL
+        },
+        "ESTORNUDO": {
+            "row": 3,
+            "col": 0,
+            "orientation": Orientation.HORIZONTAL
+        },
+        "SAMSUNG": {
+            "row": 2,
+            "col": 9,
+            "orientation": Orientation.VERTICAL_REVERSED
+        }
+    }
+
+    assert(solve_soup(soup, wordlist) == word_placements)
 
 
 def test_find_word_placement():
-    pass
+    soup = [["P", "A", "E", "N", "J", "Y", "U", "K", "I", "F", "C"],
+            ["E", "X", "Y", "L", "P", "C", "Y", "W", "V", "A", "L"],
+            ["E", "J", "V", "Q", "B", "J", "X", "I", "C", "G", "F"],
+            ["E", "S", "T", "O", "R", "N", "U", "D", "O", "N", "U"],
+            ["U", "D", "N", "W", "Z", "M", "D", "O", "R", "U", "T"],
+            ["Y", "R", "S", "E", "Ñ", "A", "Ñ", "C", "R", "S", "B"],
+            ["L", "O", "Y", "H", "L", "T", "D", "O", "I", "M", "O"],
+            ["E", "X", "V", "P", "H", "E", "Y", "N", "E", "A", "L"],
+            ["Q", "V", "X", "U", "H", "R", "V", "A", "N", "S", "X"],
+            ["C", "I", "N", "T", "A", "A", "C", "I", "T", "J", "K"],
+            ["B", "X", "K", "X", "G", "O", "P", "P", "E", "E", "S"]]
+
+    word_1 = "ESTORNUDO"
+    word_2 = "MATERA"
+    word_3 = "PIANO"
+
+    placement_1 = {
+        "row": 3,
+        "col": 0,
+        "orientation": Orientation.HORIZONTAL
+    }
+    placement_2 = {
+        "row": 4,
+        "col": 5,
+        "orientation": Orientation.VERTICAL
+    }
+    placement_3 = {
+        "row": 6,
+        "col": 7,
+        "orientation": Orientation.VERTICAL_REVERSED
+    }
+
+    assert(find_word_placement(word_1, soup) == placement_1)
+    assert(find_word_placement(word_2, soup) == placement_2)
+    assert(find_word_placement(word_3, soup) == placement_3)
 
 
 def test_find_first_letter_candidates():
-    pass
+    soup = [["P", "A", "E", "N", "J", "Y", "U", "K", "I", "F", "C"],
+            ["E", "X", "Y", "L", "P", "C", "Y", "W", "V", "A", "L"],
+            ["E", "J", "V", "Q", "B", "J", "X", "I", "C", "G", "F"],
+            ["E", "S", "T", "O", "R", "N", "U", "D", "O", "N", "U"],
+            ["U", "D", "N", "W", "Z", "M", "D", "O", "R", "U", "T"],
+            ["Y", "R", "S", "E", "Ñ", "A", "Ñ", "C", "R", "S", "B"],
+            ["L", "O", "Y", "H", "L", "T", "D", "O", "I", "M", "O"],
+            ["E", "X", "V", "P", "H", "E", "Y", "N", "E", "A", "L"],
+            ["Q", "V", "X", "U", "H", "R", "V", "A", "N", "S", "X"],
+            ["C", "I", "N", "T", "A", "A", "C", "I", "T", "J", "K"],
+            ["B", "X", "K", "X", "G", "O", "P", "P", "E", "E", "S"]]
+
+    word_1 = "ESTORNUDO"
+    word_2 = "MATERA"
+    word_3 = "PIANO"
+
+    candidates_1 = [(1, 0), (2, 0), (3, 0), (7, 0), (0, 2),
+                    (5, 3), (7, 5), (7, 8), (10, 8), (10, 9)]
+    candidates_2 = [(4, 5), (6, 9)]
+    candidates_3 = [(0, 0), (7, 3), (1, 4), (10, 6), (10, 7)]
+
+    assert(find_first_letter_candidates(word_1, soup) == candidates_1)
+    assert(find_first_letter_candidates(word_2, soup) == candidates_2)
+    assert(find_first_letter_candidates(word_3, soup) == candidates_3)
 
 
 def test_parse_soups():
-    pass
+    filename = "text_sopas"
+    f = open(filename, "r")
+
+    wordlist = ["ESTO", "ES", "UN", "EJEMPLO",
+                "PARA", "PROBAR", "LA", "FUNCION"]
+    soup = [["I", "Ñ", "H", "Z", "T", "G", "Y", "H", "U", "O"],
+            ["B", "M", "P", "E", "J", "E", "M", "P", "L", "O"],
+            ["T", "Y", "E", "F", "B", "C", "Y", "E", "D", "C"],
+            ["C", "E", "F", "U", "N", "C", "I", "O", "N", "X"],
+            ["P", "B", "O", "T", "S", "E", "B", "M", "Q", "L"],
+            ["N", "U", "M", "V", "B", "N", "P", "S", "B", "A"],
+            ["E", "T", "U", "I", "W", "V", "I", "Q", "L", "M"],
+            ["D", "Y", "P", "A", "R", "A", "B", "O", "R", "P"],
+            ["V", "U", "E", "S", "E", "I", "T", "E", "R", "B"],
+            ["H", "S", "M", "T", "V", "H", "H", "V", "P", "W"]]
+
+    assert(parse_soups(f) == [(soup, wordlist)])
