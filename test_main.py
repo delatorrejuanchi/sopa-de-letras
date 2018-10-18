@@ -2,28 +2,17 @@
 
 import pytest
 from random import shuffle, seed
-from main import *
 
-dictionary = ["MANY", "DAFFY", "INCREDIBLE", "MATCH", "PENITENT", "ADMIT",
-              "DECOROUS", "BROAD", "STUPID", "AGONIZING", "DISGUSTED",
-              "DROP", "FORGETFUL", "RULE", "OBESE", "CATS", "TYPICAL",
-              "SPACE", "BOTTLE", "RARE", "FILTHY", "SMOKE", "WOOZY",
-              "YOUTHFUL", "CROWDED", "RACE", "ITCHY", "SOUND", "PUNCH",
-              "MESS", "EARTH", "SOFT", "MEAL", "ANNOYED", "HOME",
-              "DETERMINED", "FINICKY", "CLOISTERED", "FEAR", "MUTE",
-              "FRESH", "ZANY", "HELP", "OVEN", "SILLY", "PIE", "DAM",
-              "ALARM", "WILD", "WAVE", "NIGHT", "ACOUSTIC", "CREEPY",
-              "WHOLESALE", "BLINK", "NEIGHBORLY", "WONDERFUL", "RUN",
-              "SLEEPY", "EXUBERANT", "TWIST", "BALANCE", "STATEMENT",
-              "BLACK", "DISTANCE", "AWFUL", "MILITARY", "OBSERVATION",
-              "PLUCKY", "WAX", "SKINNY", "BEHAVIOR", "FLIGHT", "ROT",
-              "VALUE", "FINE", "TOY", "CELLAR", "GLIB", "DOGS", "KILL",
-              "MEND", "APPROVE", "RAIN", "ELEGANT", "ANXIOUS", "SHOE",
-              "SUSPEND", "IRATE", "SORT", "EXCLUSIVE", "ROOF", "CAN",
-              "HOOK", "BUZZ", "CONFUSED", "EMPLOY", "VALUABLE", "RESCUE",
-              "SUIT"]
+# Importamos las funciones que vamos a testear
+from main import Orientation, get_wordlist_input, is_wordlist_valid
+from main import generate_soup, calculate_soup_size, generate_word_placements
+from main import try_to_place, is_placement_valid, get_letter_positions
+from main import create_soup_matrix, random_letter, display_soup, color_soup
+from main import solve_soup, find_word_placement, find_first_letter_candidates
+from main import parse_soups
 
-seed(1234)
+with open("dictionary.txt", "r") as f:
+    dictionary = f.read().split("\n")
 
 
 def test_get_wordlist_input():
@@ -60,9 +49,9 @@ def test_calculate_soup_size():
     wordlist_2 = ["GUINNESS", "QUILMES", "STELLA", "SANTAFE"]
     wordlist_3 = ["EMPANDA", "ASADO", "GUIZO", "SPAGHETTI"]
 
-    assert(calculate_soup_size(wordlist_1) == 10)
-    assert(calculate_soup_size(wordlist_2) == 10)
-    assert(calculate_soup_size(wordlist_3) == 11)
+    assert(calculate_soup_size(wordlist_1) == 11)
+    assert(calculate_soup_size(wordlist_2) == 11)
+    assert(calculate_soup_size(wordlist_3) == 12)
 
 
 def test_generate_word_placements():
@@ -98,7 +87,7 @@ def test_is_placement_valid():
             "orientation": Orientation.HORIZONTAL_REVERSED
         }
     }
-    size = 7
+    size = 8
 
     placement_1 = {
         "row": 0,
@@ -184,7 +173,7 @@ def test_get_letter_positions():
 
 
 def test_create_soup_matrix():
-    size = 7
+    size = 8
     word_placements = {
         "PERRO": {
             "row": 1,
@@ -344,8 +333,6 @@ def test_find_first_letter_candidates():
 
 
 def test_parse_soups():
-    filename = "text_sopas"
-    f = open(filename, "r")
 
     wordlist = ["ESTO", "ES", "UN", "EJEMPLO",
                 "PARA", "PROBAR", "LA", "FUNCION"]
@@ -360,4 +347,5 @@ def test_parse_soups():
             ["V", "U", "E", "S", "E", "I", "T", "E", "R", "B"],
             ["H", "S", "M", "T", "V", "H", "H", "V", "P", "W"]]
 
-    assert(parse_soups(f) == [(soup, wordlist)])
+    with open("test_sopas.txt", "r") as f:
+        assert(parse_soups(f) == [(soup, wordlist)])

@@ -98,26 +98,34 @@ def generate_soup(wordlist):
 # calculate_soup_size: list(str) -> int
 # Recibe una lista de palabras y devuelve el tamaño que se debe usar para
 # generar la sopa de letras. Tiene en cuenta la longitud de la palabra más
-# larga, la cantidad de palabras recibidas y un paddong extra (2).
+# larga, la cantidad de palabras recibidas y un padding extra (3).
 def calculate_soup_size(wordlist):
-    return max([len(word) for word in wordlist] + [len(wordlist)]) + 2
+    return max([len(word) for word in wordlist] + [len(wordlist)]) + 3
 
 
 # generate_word_placements: list(str) int -> word_placements
 # Recibe una lista de palabras y el tamaño de la sopa de letras, genera para
 # cada palabra un placement al azar y los devuelve en un diccionario de
 # word_placements.
-def generate_word_placements(wordlist, size):  # TODO: improve
+def generate_word_placements(wordlist, size):
     word_placements = {}
+    failed_word_placements = []
     current_word_index = 0
 
     while current_word_index != len(wordlist):
         word = wordlist[current_word_index]
-        placement = try_to_place(word, word_placements, size)
+        placement = try_to_place(
+            word,
+            word_placements,
+            size,
+            failed_word_placements
+        )
+
         if placement:
             current_word_index += 1
             word_placements[word] = placement
         else:
+            failed_word_placements.append(word_placements.copy())
             current_word_index = max(0, current_word_index - 1)
             if wordlist[current_word_index] in word_placements:
                 del word_placements[wordlist[current_word_index]]
@@ -129,7 +137,7 @@ def generate_word_placements(wordlist, size):  # TODO: improve
 # Recibe una palabra, un diccionario de word_placements y el tamaño de la sopa
 # de letras. Devuelve un placement para la palabra si existe uno posible, y
 # False en caso contrario.
-def try_to_place(word, word_placements, size):
+def try_to_place(word, word_placements, size, failed_word_placements=[]):
     possible_orientations = list(Orientation)
     possible_positions = [(row, col)
                           for col in range(size) for row in range(size)]
@@ -143,11 +151,28 @@ def try_to_place(word, word_placements, size):
                 "col": col,
                 "orientation": orientation
             }
+
+            if (should_skip_placement(word,
+                                      placement,
+                                      word_placements,
+                                      failed_word_placements)):
+                continue
+
             if is_placement_valid(word, placement, word_placements, size):
                 return placement
 
     return False
 
+
+def should_skip_placement(word, placement, word_placements, failed):
+    new_word_placements = {
+        **word_placements,
+        word: placement
+    }
+
+    return any(all(item in to_skip.items()
+                   for item in new_word_placements.items())
+               for to_skip in failed)
 
 # is_placement_valid: str placement word_placements int -> bool
 # Recibe una palabra, un posible placement para la misma, un diccionario de
