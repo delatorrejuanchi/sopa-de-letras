@@ -164,6 +164,7 @@ def try_to_place(word, word_placements, size, failed_word_placements=[]):
     return False
 
 
+# TODO: write
 def should_skip_placement(word, placement, word_placements, failed):
     new_word_placements = {
         **word_placements,
@@ -173,6 +174,7 @@ def should_skip_placement(word, placement, word_placements, failed):
     return any(all(item in to_skip.items()
                    for item in new_word_placements.items())
                for to_skip in failed)
+
 
 # is_placement_valid: str placement word_placements int -> bool
 # Recibe una palabra, un posible placement para la misma, un diccionario de
