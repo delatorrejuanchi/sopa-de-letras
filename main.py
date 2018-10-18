@@ -4,6 +4,7 @@
 import re
 from enum import Enum
 from random import choice, randint, random, shuffle
+from math import sqrt, ceil
 from termcolor import colored
 
 
@@ -100,7 +101,9 @@ def generate_soup(wordlist):
 # generar la sopa de letras. Tiene en cuenta la longitud de la palabra más
 # larga, la cantidad de palabras recibidas y un padding extra (3).
 def calculate_soup_size(wordlist):
-    return max([len(word) for word in wordlist] + [len(wordlist)]) + 3
+    return ceil(max([len(word) for word in wordlist] +
+                    [ceil(sqrt(sum(len(word) for word in wordlist)))])*1.5)
+    # return max([len(word) for word in wordlist] + [len(wordlist)])
 
 
 # generate_word_placements: list(str) int -> word_placements
@@ -125,7 +128,7 @@ def generate_word_placements(wordlist, size):
             current_word_index += 1
             word_placements[word] = placement
         else:
-            failed_word_placements.append(word_plaahoracements.copy())
+            failed_word_placements.append(word_placements.copy())
             current_word_index = max(0, current_word_index - 1)
             if wordlist[current_word_index] in word_placements:
                 del word_placements[wordlist[current_word_index]]
