@@ -133,10 +133,11 @@ def generate_word_placements(wordlist, size):
     return word_placements
 
 
-# try_to_place: string word_placements int -> placement / bool
-# Recibe una palabra, un diccionario de word_placements y el tamaño de la sopa
-# de letras. Devuelve un placement para la palabra si existe uno posible, y
-# False en caso contrario.
+# try_to_place: string word_placements int list(word_placements) -> placement /
+#                                                                   bool
+# Recibe una palabra, un diccionario de word_placements, el tamaño de la sopa
+# de letras y una lista de word_placements ya probados. Devuelve un placement
+# para la palabra si existe uno posible, y False en caso contrario.
 def try_to_place(word, word_placements, size, failed_word_placements=[]):
     possible_orientations = list(Orientation)
     possible_positions = [(row, col)
@@ -164,7 +165,12 @@ def try_to_place(word, word_placements, size, failed_word_placements=[]):
     return False
 
 
-# TODO: write
+# should_skip_placement:
+#   str placement word_placements list(word_placements) -> bool
+# Recibe una palabra, un placement, un diccionario word_placements y una lista
+# de word_placements ya probados. Devuelve True si deberíamos saltear el nuevo
+# placement (ya probamos el nuevo placement), y False en caso contrario (no
+# ha sido probado todavía).
 def should_skip_placement(word, placement, word_placements, failed):
     new_word_placements = {
         **word_placements,
