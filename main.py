@@ -52,7 +52,6 @@ class Orientation(Enum):
     DIAGONAL = 5
 
 
-
 # get_wordlist_input: -> list(str)
 # Pide como input una string con palabras separadas por espacios. Si es
 # válida, elimina los duplicados, transforma a mayúsculas las palabras y las
