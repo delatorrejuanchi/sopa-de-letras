@@ -333,9 +333,9 @@ def test_find_first_letter_candidates():
 
 
 def test_parse_soups():
-
     wordlist = ["ESTO", "ES", "UN", "EJEMPLO",
                 "PARA", "PROBAR", "LA", "FUNCION"]
+
     soup = [["I", "Ñ", "H", "Z", "T", "G", "Y", "H", "U", "O"],
             ["B", "M", "P", "E", "J", "E", "M", "P", "L", "O"],
             ["T", "Y", "E", "F", "B", "C", "Y", "E", "D", "C"],
