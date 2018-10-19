@@ -32,7 +32,7 @@ def test_is_wordlist_valid():
 def test_generate_soup():
     n_words = 10
 
-    for _ in range(1000):
+    for _ in range(100):
         shuffle(dictionary)
         wordlist = dictionary[:n_words]
         soup = generate_soup(wordlist)
@@ -46,16 +46,23 @@ def test_calculate_soup_size():
     wordlist_1 = ["PERRO", "ELECTRON", "COMIDA", "RELOJ", "TERMO"]
     wordlist_2 = ["GUINNESS", "QUILMES", "STELLA", "SANTAFE"]
     wordlist_3 = ["EMPANDA", "ASADO", "GUIZO", "SPAGHETTI"]
+    wordlist_4 = ["PERRO", "ELECTRON", "COMIDA", "RELOJ", "TERMO", "GUINNESS",
+                  "QUILMES", "STELLA", "SANTAFE", "EMPANDA", "ASADO", "GUIZO",
+                  "SPAGHETTI", "COMIDA", "HAMBURGUESA", "PERRO", "GATO",
+                  "FISICA", "CERRO", "MONTAÑA", "AMOR", "DIRECTORIO",
+                  "SERPIENTE", "ESTRUCTURA", "DATOS", "BASE", "ALGORITMO",
+                  "MATEMATICA"]
 
-    assert(calculate_soup_size(wordlist_1) == 12)
-    assert(calculate_soup_size(wordlist_2) == 12)
-    assert(calculate_soup_size(wordlist_3) == 14)
+    assert(calculate_soup_size(wordlist_1) == 11)
+    assert(calculate_soup_size(wordlist_2) == 11)
+    assert(calculate_soup_size(wordlist_3) == 12)
+    assert(calculate_soup_size(wordlist_4) == 28)
 
 
 def test_generate_word_placements():
     n_words = 10
 
-    for _ in range(1000):
+    for _ in range(100):
         shuffle(dictionary)
         wordlist = dictionary[:n_words]
         soup_size = calculate_soup_size(wordlist)
@@ -68,7 +75,86 @@ def test_generate_word_placements():
 
 
 def test_try_to_place():
-    pass
+    # Debería devolver False, porque "WORD" no entra
+    case_1 = [
+        "WORD",
+        {},
+        0,
+        []
+    ]
+
+    # Debería devolver un placement, porque existen placements posibles
+    case_2 = [
+        "WORD",
+        {
+            "PERRO": {
+                "row": 2,
+                "col": 3,
+                "orientation": Orientation.HORIZONTAL
+            }
+        },
+        10,
+        []
+    ]
+
+    # Debería devolver False, porque las únicas posiciones disponibles están
+    # prohibidas por el último argumento.
+    case_3 = [
+        "CCC",
+        {
+            "AAA": {
+                "row": 0,
+                "col": 0,
+                "orientation": Orientation.HORIZONTAL
+            },
+            "BBB": {
+                "row": 1,
+                "col": 0,
+                "orientation": Orientation.HORIZONTAL
+            }
+        },
+        3,
+        [
+            {
+                "AAA": {
+                    "row": 0,
+                    "col": 0,
+                    "orientation": Orientation.HORIZONTAL
+                },
+                "BBB": {
+                    "row": 1,
+                    "col": 0,
+                    "orientation": Orientation.HORIZONTAL
+                },
+                "CCC": {
+                    "row": 2,
+                    "col": 0,
+                    "orientation": Orientation.HORIZONTAL
+                }
+            },
+            {
+                "AAA": {
+                    "row": 0,
+                    "col": 0,
+                    "orientation": Orientation.HORIZONTAL
+                },
+                "BBB": {
+                    "row": 1,
+                    "col": 0,
+                    "orientation": Orientation.HORIZONTAL
+                },
+                "CCC": {
+                    "row": 2,
+                    "col": 0,
+                    "orientation": Orientation.HORIZONTAL_REVERSED
+                }
+            }
+        ]
+    ]
+
+    assert(try_to_place(*case_1) is False)
+    assert(try_to_place(*case_2))
+    assert(try_to_place(*case_3) is False)
 
 
 def test_is_placement_valid():

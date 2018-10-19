@@ -8,7 +8,7 @@ from math import sqrt, ceil
 from termcolor import colored
 
 
-DEBUG = False
+DEBUG = True
 
 # Representamos una sopa de letras como:
 # sopa_de_letras: list(list(str))
@@ -98,12 +98,20 @@ def generate_soup(wordlist):
 
 # calculate_soup_size: list(str) -> int
 # Recibe una lista de palabras y devuelve el tamaño que se debe usar para
-# generar la sopa de letras. Tiene en cuenta la longitud de la palabra más
-# larga, la cantidad de palabras recibidas y un padding extra (3).
+# generar la sopa de letras. Lo calcula de la siguiente manera:
+# Si la lista de palabras tiene menos de 20 palabras, devuelve el máximo entre
+# el tamaño de la palabra más larga y la cantidad de palabras, más un padding
+# extra de 3.
+# Si no, devuelve el techo de la raíz cuadrada de la cantidad total de letras
+# en la lista de palabra multiplicada por 2.
+# De esta manera las sopas de letras con pocas palabras no son tan chicas, y
+# las que tienen muchas palabras no son innecesariamente grandes.
 def calculate_soup_size(wordlist):
-    return ceil(max([len(word) for word in wordlist] +
-                    [ceil(sqrt(sum(len(word) for word in wordlist)))])*1.5)
-    # return max([len(word) for word in wordlist] + [len(wordlist)])
+    if len(wordlist) <= 20:
+        return max([len(word) for word in wordlist] + [len(wordlist)]) + 3
+    else:
+        character_count = sum(len(word) for word in wordlist)
+        return ceil(sqrt(character_count)*2)
 
 
 # generate_word_placements: list(str) int -> word_placements
