@@ -38,6 +38,31 @@ DEBUG = False
 #   "orientation": Orientation --> tipo de orientación de la palabra
 # }
 
+# Recibimos las soups y sus wordlist a resolver en un archivo llamado sopas.txt
+# La estructura que debe llevar es la siguiente:
+# Donde empieza la sopa de letra tiene que tener: # INICIO
+# Luego en la siguientes lineas tiene que tener la sopa de letras, cada letra 
+# en mayuscula y separadas con un espacio.
+# Aclaracion: Cada linea del archivo .txt tiene que ser una fila de la sopa
+# Luego en la ultima linea agregamos las palabras escondidas en la sopa, cada
+# una en mayuscula y separadas con un espacio.
+# Para finalizar agregamos una ultima linea: # FIN
+# Ejemplo:
+# # INICIO
+# C Z M M G S G O J V R
+# V T J H U L V R A O V
+# S D A L M N C C N G W
+# K V W Y T P M V Ñ H T
+# R F O U S E D C W B B
+# Q E J E M P L O M B Q
+# Ñ J O Ñ A W X D U H B
+# P A V V U H X X N W P
+# G Q T O A W K Ñ U U U
+# E S T O K N M U N Ñ Ñ
+# C D X W V O P Y H K J
+# ESTO ES UN EJEMPLO
+# # FIN
+
 
 # Representamos las 5 orientaciones con números:
 # Orientation.HORIZONTAL = 1
