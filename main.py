@@ -8,7 +8,7 @@ from math import sqrt, ceil
 from termcolor import colored
 
 
-DEBUG = True
+DEBUG = True  # Activa o desactiva los colores en la terminal
 
 # Representamos una sopa de letras como:
 # sopa_de_letras: list(list(str))
@@ -38,30 +38,34 @@ DEBUG = True
 #   "orientation": Orientation --> tipo de orientación de la palabra
 # }
 
-# Recibimos las soups y sus wordlist a resolver en un archivo llamado sopas.txt
+# Si elige la opción 3 (resolver sopas de letras), deberá ingresar el nombre
+# de un archivo de texto que contenga las sopas de letras.
 # La estructura que debe llevar es la siguiente:
-# Donde empieza la sopa de letra tiene que tener: # INICIO
-# Luego en la siguientes lineas tiene que tener la sopa de letras, cada letra 
-# en mayuscula y separadas con un espacio.
-# Aclaracion: Cada linea del archivo .txt tiene que ser una fila de la sopa
-# Luego en la ultima linea agregamos las palabras escondidas en la sopa, cada
-# una en mayuscula y separadas con un espacio.
-# Para finalizar agregamos una ultima linea: # FIN
+#   - Donde empieza la sopa de letra tiene que tener: # INICIO
+#   - Luego en la siguientes lineas tiene que tener la sopa de letras, con
+#     cada letra en mayúscula y separadas con un espacio. Aclaración: cada
+#     línea tiene que ser una fila de la sopa de letras.
+#   - Luego en la ultima linea agregamos las palabras escondidas en la sopa,
+#     cada una en mayúscula y separadas con un espacio.
+#   - Para finalizar agregamos una ultima linea: # FIN
 # Ejemplo:
-# # INICIO
-# C Z M M G S G O J V R
-# V T J H U L V R A O V
-# S D A L M N C C N G W
-# K V W Y T P M V Ñ H T
-# R F O U S E D C W B B
-# Q E J E M P L O M B Q
-# Ñ J O Ñ A W X D U H B
-# P A V V U H X X N W P
-# G Q T O A W K Ñ U U U
-# E S T O K N M U N Ñ Ñ
-# C D X W V O P Y H K J
-# ESTO ES UN EJEMPLO
-# # FIN
+#
+#   # INICIO
+#   C Z M M G S G O J V R
+#   V T J H U L V R A O V
+#   S D A L M N C C N G W
+#   K V W Y T P M V Ñ H T
+#   R F O U S E D C W B B
+#   Q E J E M P L O M B Q
+#   Ñ J O Ñ A W X D U H B
+#   P A V V U H X X N W P
+#   G Q T O A W K Ñ U U U
+#   E S T O K N M U N Ñ Ñ
+#   C D X W V O P Y H K J
+#   ESTO ES UN EJEMPLO
+#   # FIN
+#
+# Para ver otro ejemplo, vea sopas.txt
 
 
 # Representamos las 5 orientaciones con números:
@@ -490,7 +494,7 @@ if __name__ == "__main__":
         print("Selecciona una opción:")
         print("1) Generar sopa de letras")
         print("2) Generar N sopas de letras")
-        print("3) Resolver sopa de letras")
+        print("3) Resolver sopas de letras")
         print(f"4) Activar/Desactivar modo depuración (DEBUG={DEBUG})")
         print("5) Salir")
 
@@ -507,6 +511,8 @@ if __name__ == "__main__":
             except ValueError:
                 print(colored("El valor no es un número", color="red"))
         elif option == "3":
+            print("Por favor, revise la documentación sobre como ingresar",
+                  "las sopas de letras en el archivo main.py")
             filename = input("Ingresa el nombre del archivo: ")
             try:
                 with open(filename, "r") as f:
