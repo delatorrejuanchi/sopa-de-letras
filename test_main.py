@@ -1,7 +1,9 @@
 #!usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import pytest
 from random import shuffle, seed
+
 
 # Importamos las funciones que vamos a testear
 from main import Orientation, get_wordlist_input, is_wordlist_valid
@@ -13,10 +15,6 @@ from main import parse_soups
 
 with open("dictionary.txt", "r") as f:
     dictionary = f.read().split("\n")
-
-
-def test_get_wordlist_input():
-    pass
 
 
 def test_is_wordlist_valid():
@@ -49,9 +47,9 @@ def test_calculate_soup_size():
     wordlist_2 = ["GUINNESS", "QUILMES", "STELLA", "SANTAFE"]
     wordlist_3 = ["EMPANDA", "ASADO", "GUIZO", "SPAGHETTI"]
 
-    assert(calculate_soup_size(wordlist_1) == 11)
-    assert(calculate_soup_size(wordlist_2) == 11)
-    assert(calculate_soup_size(wordlist_3) == 12)
+    assert(calculate_soup_size(wordlist_1) == 12)
+    assert(calculate_soup_size(wordlist_2) == 12)
+    assert(calculate_soup_size(wordlist_3) == 14)
 
 
 def test_generate_word_placements():
@@ -207,7 +205,69 @@ def test_display_soup():
 
 
 def test_color_soup():
-    pass
+    soup_matrix = [["P", "A", "E", "N", "J", "Y", "U", "K", "I", "F", "C"],
+                   ["E", "X", "Y", "L", "P", "C", "Y", "W", "V", "A", "L"],
+                   ["E", "J", "V", "Q", "B", "J", "X", "I", "C", "G", "F"],
+                   ["E", "S", "T", "O", "R", "N", "U", "D", "O", "N", "U"],
+                   ["U", "D", "N", "W", "Z", "M", "D", "O", "R", "U", "T"],
+                   ["Y", "R", "S", "E", "Ñ", "A", "Ñ", "C", "R", "S", "B"],
+                   ["L", "O", "Y", "H", "L", "T", "D", "O", "I", "M", "O"],
+                   ["E", "X", "V", "P", "H", "E", "Y", "N", "E", "A", "L"],
+                   ["Q", "V", "X", "U", "H", "R", "V", "A", "N", "S", "X"],
+                   ["C", "I", "N", "T", "A", "A", "C", "I", "T", "J", "K"],
+                   ["B", "X", "K", "X", "G", "O", "P", "P", "E", "E", "S"]]
+
+    color_soup_matrix = [['P', 'A', 'E', 'N', 'J', 'Y', 'U', 'K', 'I', 'F', 'C'],
+                         ['E', 'X', 'Y', 'L', 'P', 'C', 'Y', 'W', 'V', 'A', 'L'],
+                         ['E', 'J', 'V', 'Q', 'B', 'J', 'X', 'I', '\x1b[32mC\x1b[0m', '\x1b[32mG\x1b[0m', '\x1b[32mF\x1b[0m'],
+                         ['\x1b[32mE\x1b[0m', '\x1b[32mS\x1b[0m', '\x1b[32mT\x1b[0m', '\x1b[32mO\x1b[0m', '\x1b[32mR\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mU\x1b[0m', '\x1b[32mD\x1b[0m', '\x1b[32mO\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mU\x1b[0m'],
+                         ['U', 'D', 'N', 'W', 'Z', '\x1b[32mM\x1b[0m', 'D', 'O', '\x1b[32mR\x1b[0m', '\x1b[32mU\x1b[0m', '\x1b[32mT\x1b[0m'],
+                         ['Y', 'R', 'S', 'E', 'Ñ', '\x1b[32mA\x1b[0m', 'Ñ', 'C', '\x1b[32mR\x1b[0m', '\x1b[32mS\x1b[0m', '\x1b[32mB\x1b[0m'],
+                         ['L', 'O', 'Y', 'H', 'L', '\x1b[32mT\x1b[0m', 'D', '\x1b[32mO\x1b[0m', '\x1b[32mI\x1b[0m', '\x1b[32mM\x1b[0m', '\x1b[32mO\x1b[0m'],
+                         ['E', 'X', 'V', 'P', 'H', '\x1b[32mE\x1b[0m', 'Y', '\x1b[32mN\x1b[0m', '\x1b[32mE\x1b[0m', '\x1b[32mA\x1b[0m', '\x1b[32mL\x1b[0m'],
+                         ['Q', 'V', 'X', 'U', 'H', '\x1b[32mR\x1b[0m', 'V', '\x1b[32mA\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mS\x1b[0m', 'X'],
+                         ['\x1b[32mC\x1b[0m', '\x1b[32mI\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mT\x1b[0m', '\x1b[32mA\x1b[0m', '\x1b[32mA\x1b[0m', 'C', '\x1b[32mI\x1b[0m', '\x1b[32mT\x1b[0m', 'J', 'K'],
+                         ['B', 'X', 'K', 'X', 'G', 'O', 'P', '\x1b[32mP\x1b[0m', '\x1b[32mE\x1b[0m', 'E', 'S']]
+
+    word_placements = {
+        "PIANO": {
+            "row": 6,
+            "col": 7,
+            "orientation": Orientation.VERTICAL_REVERSED
+        },
+        "MATERA": {
+            "row": 4,
+            "col": 5,
+            "orientation": Orientation.VERTICAL
+        },
+        "FUTBOL": {
+            "row": 2,
+            "col": 10,
+            "orientation": Orientation.VERTICAL
+        },
+        "CORRIENTE": {
+            "row": 2,
+            "col": 8,
+            "orientation": Orientation.VERTICAL
+        },
+        "CINTA": {
+            "row": 9,
+            "col": 0,
+            "orientation": Orientation.HORIZONTAL
+        },
+        "ESTORNUDO": {
+            "row": 3,
+            "col": 0,
+            "orientation": Orientation.HORIZONTAL
+        },
+        "SAMSUNG": {
+            "row": 2,
+            "col": 9,
+            "orientation": Orientation.VERTICAL_REVERSED
+        }
+    }
+
+    assert(color_soup(soup_matrix, word_placements) == color_soup_matrix)
 
 
 def test_solve_soup():
