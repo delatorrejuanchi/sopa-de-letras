@@ -70,9 +70,9 @@ DEBUG = True  # Activa o desactiva los colores en la terminal
 
 # Representamos las 5 orientaciones con números:
 # Orientation.HORIZONTAL = 1
-# Orientation.HORIZONTAL_REVERSED = 5
-# Orientation.VERTICAL = 5
-# Orientation.VERTICAL_REVERSED = 5
+# Orientation.HORIZONTAL_REVERSED = 2
+# Orientation.VERTICAL = 3
+# Orientation.VERTICAL_REVERSED = 4
 # Orientation.DIAGONAL = 5
 class Orientation(Enum):
     HORIZONTAL = 1

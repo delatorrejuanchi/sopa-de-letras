@@ -303,17 +303,30 @@ def test_color_soup():
                    ["C", "I", "N", "T", "A", "A", "C", "I", "T", "J", "K"],
                    ["B", "X", "K", "X", "G", "O", "P", "P", "E", "E", "S"]]
 
-    color_soup_matrix = [['P', 'A', 'E', 'N', 'J', 'Y', 'U', 'K', 'I', 'F', 'C'],
-                         ['E', 'X', 'Y', 'L', 'P', 'C', 'Y', 'W', 'V', 'A', 'L'],
-                         ['E', 'J', 'V', 'Q', 'B', 'J', 'X', 'I', '\x1b[32mC\x1b[0m', '\x1b[32mG\x1b[0m', '\x1b[32mF\x1b[0m'],
-                         ['\x1b[32mE\x1b[0m', '\x1b[32mS\x1b[0m', '\x1b[32mT\x1b[0m', '\x1b[32mO\x1b[0m', '\x1b[32mR\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mU\x1b[0m', '\x1b[32mD\x1b[0m', '\x1b[32mO\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mU\x1b[0m'],
-                         ['U', 'D', 'N', 'W', 'Z', '\x1b[32mM\x1b[0m', 'D', 'O', '\x1b[32mR\x1b[0m', '\x1b[32mU\x1b[0m', '\x1b[32mT\x1b[0m'],
-                         ['Y', 'R', 'S', 'E', 'Ñ', '\x1b[32mA\x1b[0m', 'Ñ', 'C', '\x1b[32mR\x1b[0m', '\x1b[32mS\x1b[0m', '\x1b[32mB\x1b[0m'],
-                         ['L', 'O', 'Y', 'H', 'L', '\x1b[32mT\x1b[0m', 'D', '\x1b[32mO\x1b[0m', '\x1b[32mI\x1b[0m', '\x1b[32mM\x1b[0m', '\x1b[32mO\x1b[0m'],
-                         ['E', 'X', 'V', 'P', 'H', '\x1b[32mE\x1b[0m', 'Y', '\x1b[32mN\x1b[0m', '\x1b[32mE\x1b[0m', '\x1b[32mA\x1b[0m', '\x1b[32mL\x1b[0m'],
-                         ['Q', 'V', 'X', 'U', 'H', '\x1b[32mR\x1b[0m', 'V', '\x1b[32mA\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mS\x1b[0m', 'X'],
-                         ['\x1b[32mC\x1b[0m', '\x1b[32mI\x1b[0m', '\x1b[32mN\x1b[0m', '\x1b[32mT\x1b[0m', '\x1b[32mA\x1b[0m', '\x1b[32mA\x1b[0m', 'C', '\x1b[32mI\x1b[0m', '\x1b[32mT\x1b[0m', 'J', 'K'],
-                         ['B', 'X', 'K', 'X', 'G', 'O', 'P', '\x1b[32mP\x1b[0m', '\x1b[32mE\x1b[0m', 'E', 'S']]
+    color_soup_matrix = [
+        ['P', 'A', 'E', 'N', 'J', 'Y', 'U', 'K', 'I', 'F', 'C'],
+        ['E', 'X', 'Y', 'L', 'P', 'C', 'Y', 'W', 'V', 'A', 'L'],
+        ['E', 'J', 'V', 'Q', 'B', 'J', 'X', 'I', '\x1b[32mC\x1b[0m',
+            '\x1b[32mG\x1b[0m', '\x1b[32mF\x1b[0m'],
+        ['\x1b[32mE\x1b[0m', '\x1b[32mS\x1b[0m', '\x1b[32mT\x1b[0m',
+            '\x1b[32mO\x1b[0m', '\x1b[32mR\x1b[0m', '\x1b[32mN\x1b[0m',
+            '\x1b[32mU\x1b[0m', '\x1b[32mD\x1b[0m', '\x1b[32mO\x1b[0m',
+            '\x1b[32mN\x1b[0m', '\x1b[32mU\x1b[0m'],
+        ['U', 'D', 'N', 'W', 'Z', '\x1b[32mM\x1b[0m', 'D', 'O',
+            '\x1b[32mR\x1b[0m', '\x1b[32mU\x1b[0m', '\x1b[32mT\x1b[0m'],
+        ['Y', 'R', 'S', 'E', 'Ñ', '\x1b[32mA\x1b[0m', 'Ñ', 'C',
+            '\x1b[32mR\x1b[0m', '\x1b[32mS\x1b[0m', '\x1b[32mB\x1b[0m'],
+        ['L', 'O', 'Y', 'H', 'L', '\x1b[32mT\x1b[0m', 'D', '\x1b[32mO\x1b[0m',
+            '\x1b[32mI\x1b[0m', '\x1b[32mM\x1b[0m', '\x1b[32mO\x1b[0m'],
+        ['E', 'X', 'V', 'P', 'H', '\x1b[32mE\x1b[0m', 'Y', '\x1b[32mN\x1b[0m',
+            '\x1b[32mE\x1b[0m', '\x1b[32mA\x1b[0m', '\x1b[32mL\x1b[0m'],
+        ['Q', 'V', 'X', 'U', 'H', '\x1b[32mR\x1b[0m', 'V', '\x1b[32mA\x1b[0m',
+            '\x1b[32mN\x1b[0m', '\x1b[32mS\x1b[0m', 'X'],
+        ['\x1b[32mC\x1b[0m', '\x1b[32mI\x1b[0m', '\x1b[32mN\x1b[0m',
+            '\x1b[32mT\x1b[0m', '\x1b[32mA\x1b[0m', '\x1b[32mA\x1b[0m', 'C',
+            '\x1b[32mI\x1b[0m', '\x1b[32mT\x1b[0m', 'J', 'K'],
+        ['B', 'X', 'K', 'X', 'G', 'O', 'P', '\x1b[32mP\x1b[0m',
+            '\x1b[32mE\x1b[0m', 'E', 'S']]
 
     word_placements = {
         "PIANO": {
